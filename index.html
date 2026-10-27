@@ -101,8 +101,8 @@ header .tag{background:var(--surface);border:1px solid var(--line);border-radius
 .verdict{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px;font-size:18px;max-width:none;position:relative;padding-left:24px}
 .verdict::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:4px;border-radius:0 4px 4px 0;background:var(--sun)}
 .steps{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:s}
-.steps li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:18px;counter-increment:s}
-.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-weight:600;font-size:14px;width:40px;height:40px;border-radius:12px;background:var(--spruce-soft);color:var(--spruce);display:grid;place-items:center}
+.steps>li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:18px;counter-increment:s}
+.steps>li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-weight:600;font-size:14px;width:40px;height:40px;border-radius:12px;background:var(--spruce-soft);color:var(--spruce);display:grid;place-items:center}
 .steps h3{font-size:18px;margin-bottom:4px}
 .steps p{color:var(--muted);font-size:16px}
 .mine{background:var(--sun);color:var(--sun-ink);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:3px 8px;border-radius:6px;margin-left:8px;vertical-align:2px;font-family:var(--body);white-space:nowrap}
