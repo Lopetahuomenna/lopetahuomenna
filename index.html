@@ -412,6 +412,7 @@ footer{border-top:1px solid var(--line);padding-top:24px;display:flex;flex-direc
   <footer>
     <div class="logo"><span class="coin">€</span>lopetahuomenna<small>.fi</small></div>
     <p class="fine">Sivuston sisältö on yleistä tietoa eikä henkilökohtaista sijoitusneuvontaa. Sijoittamiseen liittyy aina riski, ja sijoitetun pääoman voi menettää osittain tai kokonaan.</p>
+    <p class="fine">Sivusto laskee kävijöitä nimettömästi ilman evästeitä. Henkilötietoja ei kerätä.</p>
   </footer>
 </div>
 
@@ -520,7 +521,12 @@ const ETF_INFO = `
   </div>
 </details>`;
 let AMT = 20;
+/* Anonymous event counts (GoatCounter, no cookies) */
+function gcEvent(name){ try{ if(window.goatcounter && goatcounter.count) goatcounter.count({path:name, title:name, event:true}); }catch(e){} }
+const GC_LABEL = {know:{zero:'ei-tieda',basic:'perusasiat',good:'aika-paljon'}, does:{no:'ei-viela',some:'satunnaisesti',monthly:'kuukausittain'}, why:{safety:'turva',goal:'tavoite',kids:'lapselle',learn:'oppiminen'}, amount:{'10':'10-20',  '50':'50','100':'100','250':'200+'}};
 function showPlan(){
+  gcEvent('kysely/valmis');
+  ['know','does','why','amount'].forEach(k=>gcEvent('kysely/'+{know:'tieto',does:'sijoittaa',why:'syy',amount:'summa'}[k]+'-'+(GC_LABEL[k][A[k]]||A[k])));
   const amt = +A.amount;
   AMT = amt===10 ? 20 : amt;
   const years = A.why==='goal' ? 7 : A.why==='kids' ? 18 : 25;
@@ -758,16 +764,20 @@ $('gsteps').addEventListener('change', e=>{
   renderGuide();
   document.querySelectorAll('.phase').forEach((d,j)=>{ d.open = open[j]; });
   const box = $('g'+i); if(box) box.focus({preventScroll:true});
+  if(e.target.checked) gcEvent('ohje/askel-'+String(i+1).padStart(2,'0'));
   if(!wasDone && phaseDone(PHASES[k])){
+    gcEvent('ohje/vaihe-'+(k+1)+'-valmis');
     if(k===PHASES.length-1) $('gdone').scrollIntoView({behavior:'smooth',block:'center'});
   }
 });
 document.addEventListener('click', e=>{
+  const ext = e.target.closest('a[href*="nordnet.fi"]'); if(ext) gcEvent('linkki/nordnet-'+(ext.href.includes('eunl')?'eunl':ext.href.includes('core-sp')?'sxr8':'muu'));
   const go = e.target.closest('[data-goto]'); if(go){ openPhase(+go.dataset.goto); return; }
   const j = e.target.closest('a[data-phase]'); if(j){ e.preventDefault(); openPhase(+j.dataset.phase); return; }
   const f = e.target.closest('#finalBtn'); if(f){ e.preventDefault(); const k=PHASES.findIndex(ph=>!phaseDone(ph)); if(k>=0) openPhase(k+1); else $('ohje').scrollIntoView({behavior:'smooth'}); }
 });
 renderGuide();
+document.addEventListener('click', e=>{ const sm=e.target.closest('.phase > summary'); if(sm && !sm.parentElement.open) gcEvent('ohje/'+sm.parentElement.id+'-avattu'); });
 /* Hero curve: MSCI World (EUR) growth of 1 € since 2006, drawn behind the headline */
 (function(){
   let v=1; const pts=[1];
@@ -796,5 +806,6 @@ renderGuide();
 })();
 </script>
 
+<script data-goatcounter="https://lopetahuomenna.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
